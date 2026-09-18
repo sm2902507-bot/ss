@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head><link rel="logo" href="ChatGPT Image Aug 8, 2026, 04_18_03 PM.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="theme-color" content="#5b8fb9" />
+  <title>SerenityBot – Your Stress Relief Companion</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     AUTH SCREEN
+═══════════════════════════════════════════════════════════ -->
+<div class="auth-screen" id="authScreen">
+
+  <div class="auth-blob auth-blob--1"></div>
+  <div class="auth-blob auth-blob--2"></div>
+  <div class="auth-blob auth-blob--3"></div>
+
+  <!-- Language picker on auth screen -->
+  <div class="auth-lang-bar">
+    <div class="lang-picker" id="authLangPicker">
+      <button class="lang-picker-btn" id="authLangBtn" aria-haspopup="listbox" aria-expanded="false">
+        <span id="authLangFlag">🇬🇧</span>
+        <span id="authLangName">English</span>
+        <span class="lang-caret">▾</span>
+      </button>
+      <ul class="lang-dropdown" id="authLangDropdown" role="listbox" aria-label="Select language"></ul>
+    </div>
+  </div>
+
+  <div class="auth-card" role="main">
+
+    <!-- Branding -->
+    <div class="auth-brand">
+      <div class="auth-logo">🌿</div>
+      <h1 class="auth-title">SerenityBot</h1>
+      <p class="auth-tagline" data-i18n="appTagline">Your calm, caring stress-relief companion</p>
+    </div>
+
+    <!-- Tab switcher -->
+    <div class="auth-tabs" role="tablist">
+      <button class="auth-tab active" id="tabLogin"
+              role="tab" aria-selected="true" aria-controls="panelLogin"
+              data-i18n="signIn">Sign In</button>
+      <button class="auth-tab" id="tabSignup"
+              role="tab" aria-selected="false" aria-controls="panelSignup"
+              data-i18n="createAccount">Create Account</button>
+    </div>
+
+    <!-- LOGIN panel -->
+    <div class="auth-panel active" id="panelLogin" role="tabpanel">
+      <p class="auth-welcome-text" data-i18n="welcomeBack">Welcome back! 👋 We missed you.</p>
+      <form id="loginForm" autocomplete="on" novalidate>
+
+        <div class="form-group">
+          <label for="loginUsername" data-i18n="yourName">Your Name</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" id="loginUsername" name="username"
+                   data-i18n-ph="namePlaceholder"
+                   placeholder="e.g. Alex"
+                   autocomplete="username" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword" data-i18n="password">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="loginPassword" name="password"
+                   data-i18n-ph="passwordPh"
+                   placeholder="Your password"
+                   autocomplete="current-password" required />
+            <button type="button" class="toggle-pw" id="toggleLoginPw" aria-label="Show/hide password">👁</button>
+          </div>
+        </div>
+
+        <p class="auth-error" id="loginError" role="alert" aria-live="assertive"></p>
+        <button type="submit" class="auth-submit-btn" id="loginBtn">
+          <span class="btn-text" data-i18n="signInBtn">Sign In 🌿</span>
+          <span class="btn-spinner" hidden>⏳</span>
+        </button>
+      </form>
+      <p class="auth-switch">
+        <span data-i18n="newHere">New here?</span>
+        <button class="link-btn" id="goToSignup" data-i18n="createFree">Create a free account →</button>
+      </p>
+    </div>
+
+    <!-- SIGNUP panel -->
+    <div class="auth-panel" id="panelSignup" role="tabpanel">
+      <p class="auth-welcome-text" data-i18n="letsSetup">Hey there! Let's get you set up. 😊</p>
+      <form id="signupForm" autocomplete="on" novalidate>
+
+        <div class="form-group">
+          <label for="signupUsername" data-i18n="whatCallYou">What should I call you?</label>
+          <div class="input-wrap">
+            <span class="input-icon">😊</span>
+            <input type="text" id="signupUsername" name="username"
+                   data-i18n-ph="namePh2"
+                   placeholder="e.g. Jamie or J123"
+                   autocomplete="username" required
+                   minlength="3" maxlength="30" />
+          </div>
+          <span class="form-hint" data-i18n="nameHint">3–30 characters, letters &amp; numbers only</span>
+        </div>
+
+        <div class="form-group">
+          <label for="signupPassword" data-i18n="createPassword">Create a Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="signupPassword" name="password"
+                   data-i18n-ph="passwordPh2"
+                   placeholder="At least 6 characters"
+                   autocomplete="new-password" required minlength="6" />
+            <button type="button" class="toggle-pw" id="toggleSignupPw" aria-label="Show/hide password">👁</button>
+          </div>
+          <div class="pw-strength" id="pwStrength">
+            <div class="pw-bar"><span id="pwBar"></span></div>
+            <span id="pwStrengthText"></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signupConfirm" data-i18n="confirmPassword">Confirm Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">✅</span>
+            <input type="password" id="signupConfirm" name="confirm"
+                   data-i18n-ph="confirmPh"
+                   placeholder="Repeat your password"
+                   autocomplete="new-password" required />
+          </div>
+        </div>
+ 
+        <!-- Age field -->
+        <div class="form-group">
+          <label for="signupAge">How old are you? 🎂</label>
+          <div class="input-wrap">
+            <span class="input-icon">🎂</span>
+            <input type="number" id="signupAge" name="age"
+                   placeholder="e.g. 20"
+                   min="5" max="120" required />
+          </div>
+          <span class="form-hint">We use this to personalise your experience — nothing else 💙</span>
+        </div>
+
+        <!-- Gender picker -->
+        <div class="form-group">
+          <label>I am a… 💁</label>
+          <div class="profile-chips" id="genderPicker">
+            <button type="button" class="profile-chip" data-value="male">👦 Male</button>
+            <button type="button" class="profile-chip" data-value="female">👧 Female</button>
+            <button type="button" class="profile-chip" data-value="other">🧑 Prefer not to say</button>
+          </div>
+          <input type="hidden" id="signupGender" name="gender" />
+        </div>
+
+        <!-- Role picker -->
+        <div class="form-group">
+          <label>My role is… 🌱</label>
+          <div class="profile-chips" id="rolePicker">
+            <button type="button" class="profile-chip" data-value="student">🎒 Student</button>
+            <button type="button" class="profile-chip" data-value="staff">🏫 Staff</button>
+            <button type="button" class="profile-chip" data-value="worker">💼 Worker</button>
+            <button type="button" class="profile-chip" data-value="other">🌿 Other</button>
+          </div>
+          <input type="hidden" id="signupRole" name="role" />
+        </div>
+
+        <p class="auth-error" id="signupError" role="alert" aria-live="assertive"></p>
+        <button type="submit" class="auth-submit-btn" id="signupBtn">
+          <span class="btn-text" data-i18n="createBtn">Create Account 🌱</span>
+          <span class="btn-spinner" hidden>⏳</span>
+        </button>
+      </form>
+      <p class="auth-switch">
+        <span data-i18n="haveAccount">Already have an account?</span>
+        <button class="link-btn" id="goToLogin" data-i18n="signInLink">Sign in →</button>
+      </p>
+    </div>
+
+    <p class="auth-privacy" data-i18n="privacy">
+      🔒 Your password is hashed &amp; never stored in plain text. All data stays on your device.
+    </p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     MAIN APP
+═══════════════════════════════════════════════════════════ -->
+<div class="bg-particles" id="bgParticles" hidden>
+  <span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span>
+</div>
+
+<!-- ── Sidebar overlay (mobile tap-to-close) ── -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="app-wrapper" id="appWrapper" hidden>
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-icon">🌿</div>
+        <span class="logo-text">SerenityBot</span>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Close sidebar">✕</button>
+    </div>
+
+    <!-- User greeting -->
+    <div class="sidebar-user" id="sidebarUser">
+      <div class="user-avatar">😊</div>
+      <div class="user-info">
+        <span class="user-greeting" data-i18n="hello">Hello,</span>
+        <span class="user-name" id="userName"></span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" data-view="chat">
+        <span class="nav-icon">💬</span>
+        <span class="nav-label" data-i18n="chat">Chat</span>
+      </button>
+      <button class="nav-btn" data-view="breathing">
+        <span class="nav-icon">🌬️</span>
+        <span class="nav-label" data-i18n="breathing">Breathing</span>
+      </button>
+      <button class="nav-btn" data-view="affirmations">
+        <span class="nav-icon">✨</span>
+        <span class="nav-label" data-i18n="affirmations">Affirmations</span>
+      </button>
+      <button class="nav-btn" data-view="mood">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label" data-i18n="moodLog">Mood Log</span>
+      </button>
+
+      <div class="nav-divider"></div>
+
+      <button class="nav-btn" data-view="help">
+        <span class="nav-icon">❓</span>
+        <span class="nav-label">Help</span>
+      </button>
+      <button class="nav-btn" data-view="about">
+        <span class="nav-icon">🌿</span>
+        <span class="nav-label">About</span>
+      </button>
+      <button class="nav-btn" data-view="settings">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Settings</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <!-- Language switcher in sidebar -->
+      <div class="lang-picker sidebar-lang" id="appLangPicker">
+        <button class="lang-picker-btn" id="appLangBtn" aria-haspopup="listbox" aria-expanded="false">
+          <span id="appLangFlag">🇬🇧</span>
+          <span id="appLangName" class="nav-label">English</span>
+          <span class="lang-caret nav-label">▾</span>
+        </button>
+        <ul class="lang-dropdown lang-dropdown--up" id="appLangDropdown" role="listbox" aria-label="Select language"></ul>
+      </div>
+
+      <button class="logout-btn" id="logoutBtn">
+        <span>🚪</span>
+        <span class="nav-label" data-i18n="signOut">Sign Out</span>
+      </button>
+      <p class="disclaimer" data-i18n="privateData">🔒 Your data stays private on your device.</p>
+    </div>
+  </aside>
+
+  <!-- ── Main content ── -->
+  <main class="main-content">
+
+    <!-- ════ CHAT VIEW ════ -->
+    <section class="view active" id="view-chat">
+
+      <div class="chat-header">
+        <!-- Mobile hamburger menu button -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="bot-avatar" aria-hidden="true">🌿</div>
+        <div class="chat-header-info">
+          <h1>SerenityBot</h1>
+          <span class="status-dot"></span>
+          <span class="status-text" data-i18n="hereForYou">Here for you</span>
+        </div>
+
+        <!-- Voice buttons -->
+        <button class="voice-btn" id="micBtn"
+                aria-label="Start voice input" title="Speak your message">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8"  y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <button class="voice-btn speaker" id="speakerBtn"
+                aria-label="Read last response aloud" title="Read last response aloud">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+        </button>
+
+        <button class="clear-btn" id="clearChat" data-i18n="clearChat">🗑 Clear</button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages"
+           role="log" aria-live="polite" aria-label="Chat messages"></div>
+
+      <!-- Quick-reply chips – populated by JS from i18n -->
+      <div class="quick-replies" id="quickReplies"></div>
+
+      <form class="chat-input-area" id="chatForm" autocomplete="off">
+        <textarea id="userInput" rows="1" maxlength="500"
+                  data-i18n-ph="typeMessage"
+                  placeholder="Tell me how you're feeling…"
+                  aria-label="Type your message"></textarea>
+        <button type="submit" class="send-btn" aria-label="Send message">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </form>
+    </section>
+
+    <!-- ════ BREATHING VIEW ════ -->
+    <section class="view" id="view-breathing">
+      <div class="view-header">
+        <h2 data-i18n="breathingTitle">🌬️ Breathing Exercise</h2>
+        <p  data-i18n="breathingDesc">Follow the circle to calm your nervous system.</p>
+      </div>
+      <div class="breathing-container">
+        <div class="breathing-circle" id="breathingCircle">
+          <span class="breath-label" id="breathLabel" data-i18n="pressStart">Press Start</span>
+          <span class="breath-count" id="breathCount"></span>
+        </div>
+        <div class="breathing-controls">
+          <label for="techniqueSelect" data-i18n="technique">Technique:</label>
+          <select id="techniqueSelect" class="select-input">
+            <option value="478">4-7-8 (Relaxing)</option>
+            <option value="box">Box Breathing (Focus)</option>
+            <option value="simple">Simple 4-4 (Quick Calm)</option>
+          </select>
+        </div>
+        <div class="breathing-buttons">
+          <button class="btn-primary"   id="startBreathing" data-i18n="start">▶ Start</button>
+          <button class="btn-secondary" id="stopBreathing"  data-i18n="stop" disabled>⏹ Stop</button>
+        </div>
+        <div class="breathing-info" id="breathingInfo"></div>
+      </div>
+    </section>
+
+    <!-- ════ AFFIRMATIONS VIEW ════ -->
+    <section class="view" id="view-affirmations">
+      <div class="view-header">
+        <h2 data-i18n="affirmTitle">✨ Daily Affirmations</h2>
+        <p  data-i18n="affirmDesc">Positive words to reframe your mindset.</p>
+      </div>
+      <div class="affirmation-card" id="affirmationCard">
+        <div class="affirmation-icon">🌸</div>
+        <p class="affirmation-text" id="affirmationText">…</p>
+      </div>
+      <div class="affirmation-actions">
+        <button class="btn-primary"   id="nextAffirmation" data-i18n="nextAffirm">Next Affirmation ✨</button>
+        <button class="btn-secondary" id="shareAffirmation" data-i18n="copy">Copy 📋</button>
+      </div>
+      <div class="affirmation-grid" id="affirmationGrid"></div>
+    </section>
+
+    <!-- ════ MOOD VIEW ════ -->
+    <section class="view" id="view-mood">
+      <div class="view-header">
+        <h2 data-i18n="moodTitle">📊 Mood Log</h2>
+        <p  data-i18n="moodDesc">Track how you feel over time.</p>
+      </div>
+      <div class="mood-input-area">
+        <p class="mood-prompt" data-i18n="howFeeling">How are you feeling right now?</p>
+        <div class="mood-emojis" id="moodEmojis">
+          <button class="mood-emoji" data-mood="5" data-label="Great"    aria-label="Great">😄</button>
+          <button class="mood-emoji" data-mood="4" data-label="Good"     aria-label="Good">🙂</button>
+          <button class="mood-emoji" data-mood="3" data-label="Okay"     aria-label="Okay">😐</button>
+          <button class="mood-emoji" data-mood="2" data-label="Low"      aria-label="Low">😔</button>
+          <button class="mood-emoji" data-mood="1" data-label="Stressed" aria-label="Stressed">😰</button>
+        </div>
+        <input type="text" id="moodNote" class="text-input"
+               data-i18n-ph="moodNotePh"
+               placeholder="Optional note about today…" maxlength="100" />
+        <button class="btn-primary" id="logMood" data-i18n="logMood">Log Mood</button>
+      </div>
+      <div class="mood-history" id="moodHistory">
+        <h3 data-i18n="recentEntries">Recent Entries</h3>
+        <ul id="moodList"></ul>
+        <p class="empty-state" id="moodEmpty" data-i18n="noEntries">No entries yet. Start logging your mood!</p>
+      </div>
+    </section>
+
+    <!-- ════ HELP VIEW ════ -->
+    <section class="view" id="view-help">
+      <div class="view-header">
+        <h2>❓ Help &amp; Support</h2>
+        <p>Everything you need to get the most from SerenityBot.</p>
+      </div>
+      <div class="info-page" id="helpPage">
+
+        <div class="info-search-bar">
+          <span class="info-search-icon">🔍</span>
+          <input type="text" id="helpSearch" placeholder="Search help topics…" aria-label="Search help topics" />
+        </div>
+
+        <div class="faq-list" id="faqList">
+
+          <details class="faq-item">
+            <summary class="faq-q">💬 How do I start a conversation?</summary>
+            <p class="faq-a">Just type how you're feeling in the chat box and press Send — or tap one of the quick-reply chips like "I feel anxious". SerenityBot will respond warmly and guide you from there.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">🎤 How does voice chat work?</summary>
+            <p class="faq-a">Tap the <strong>microphone 🎤</strong> button in the chat header and speak naturally. Your words will appear in the text box and send automatically. The <strong>speaker 🔊</strong> button reads the last bot response aloud. Voice works in Chrome, Edge, and Safari 16+.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">🌐 How do I change the language?</summary>
+            <p class="faq-a">Click the language picker button (shows flag + language name) in the top-right on the login screen, or at the bottom of the sidebar inside the app. We support 10 languages including English, Tamil, Hindi, Spanish, French, Arabic, German, Japanese, Portuguese, and Chinese.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">🌬️ How does the breathing exercise work?</summary>
+            <p class="faq-a">Go to the <strong>Breathing</strong> tab and choose a technique — 4-7-8 (deep relaxation), Box Breathing (focus), or Simple 4-4 (quick calm). Press Start and follow the expanding/contracting circle. It runs for 5 cycles and stops automatically.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">📊 What is the Mood Log?</summary>
+            <p class="faq-a">The Mood Log lets you record how you feel each day with a simple emoji (from 😄 Great to 😰 Stressed) plus an optional note. Your entries are saved privately on your device. Checking in regularly helps you notice patterns over time.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">✨ What are Affirmations?</summary>
+            <p class="faq-a">Affirmations are short, positive statements that help shift your mindset. Tap <strong>Next Affirmation</strong> to see a new one, or browse the grid below. You can copy any affirmation to your clipboard with the Copy button.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">🌸 Why do flowers bloom when I move my cursor?</summary>
+            <p class="faq-a">SerenityBot uses your profile to create a personalised cursor effect — flowers bloom for women, rockets and stars for men, balloons for children, butterflies for others. It's a small reminder that you bring beauty wherever you go. You can turn this off in <strong>Settings</strong>.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">🔒 Is my data safe and private?</summary>
+            <p class="faq-a">Yes — completely. Your password is hashed with SHA-256 and a unique salt before storage. Your chat history, mood logs, and profile are stored only on your own device using localStorage. Nothing is sent to any server.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">🗑 How do I clear my chat history?</summary>
+            <p class="faq-a">Click the <strong>🗑 Clear</strong> button in the top-right of the chat view. This removes all messages from the current session. You can also clear all stored data from <strong>Settings → Clear All My Data</strong>.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">📱 Can I use this on my phone?</summary>
+            <p class="faq-a">Yes! SerenityBot is fully mobile-responsive. Open it in your phone's browser and tap <strong>Share → Add to Home Screen</strong> to install it like an app. The bottom navigation bar and sidebar drawer work with touch.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">🚨 What if I need urgent help?</summary>
+            <p class="faq-a">SerenityBot is a supportive companion — not a substitute for professional care. If you are in crisis or need urgent support, please reach out to a trusted person or a mental health helpline in your country. You are not alone, and help is always available. 💙</p>
+          </details>
+
+        </div>
+
+        <div class="help-contact-card">
+          <div class="help-contact-icon">💌</div>
+          <h3>Still need help?</h3>
+          <p>Check out the About page to learn more about SerenityBot, or adjust your preferences in Settings.</p>
+          <div class="help-contact-btns">
+            <button class="btn-primary" onclick="App.switchView('about')">🌿 About SerenityBot</button>
+            <button class="btn-secondary" onclick="App.switchView('settings')">⚙️ Settings</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ════ ABOUT VIEW ════ -->
+    <section class="view" id="view-about">
+      <div class="view-header">
+        <h2>🌿 About SerenityBot</h2>
+        <p>A calm companion built with care.</p>
+      </div>
+      <div class="info-page">
+
+        <div class="about-hero">
+          <div class="about-hero-logo">🌿</div>
+          <h2 class="about-hero-title">SerenityBot</h2>
+          <p class="about-hero-sub">Your personal stress-relief companion</p>
+          <div class="about-version-badge">Version 2.0</div>
+        </div>
+
+        <div class="about-cards">
+
+          <div class="about-card">
+            <div class="about-card-icon">💙</div>
+            <h3>Our Purpose</h3>
+            <p>SerenityBot was created to give everyone — regardless of age, gender, or background — a warm, private space to process emotions, find calm, and feel supported. We believe mental wellbeing should be accessible to all.</p>
+          </div>
+
+          <div class="about-card">
+            <div class="about-card-icon">🛡️</div>
+            <h3>Your Privacy</h3>
+            <p>Everything stays on your device. Your passwords are hashed with SHA-256 and a unique random salt. No data is sent to any server, ever. No accounts are tracked. No analytics. Just you and your safe space.</p>
+          </div>
+
+          <div class="about-card">
+            <div class="about-card-icon">🌍</div>
+            <h3>Built for Everyone</h3>
+            <p>SerenityBot supports 10 languages with full voice input and output. It adapts its tone, colours, and cursor effects based on your age, gender, and role — so it always feels like it was made just for you.</p>
+          </div>
+
+          <div class="about-card">
+            <div class="about-card-icon">🧠</div>
+            <h3>How It Works</h3>
+            <p>The chatbot uses keyword-based intent matching with a large bank of caring, tailored responses. It recognises anxiety, stress, sadness, loneliness, sleep issues, relationship challenges, and more — responding with empathy and practical tools.</p>
+          </div>
+
+          <div class="about-card">
+            <div class="about-card-icon">🌸</div>
+            <h3>A Note on Safety</h3>
+            <p>SerenityBot is a supportive companion, not a medical or clinical tool. If you are experiencing a mental health crisis, please seek professional support. You deserve real care, and help is always available. 💜</p>
+          </div>
+
+          <div class="about-card">
+            <div class="about-card-icon">✨</div>
+            <h3>Features</h3>
+            <ul class="about-feature-list">
+              <li>💬 Personalised chat with 16 intent categories</li>
+              <li>🌬️ 3 guided breathing techniques</li>
+              <li>✨ 30 daily affirmations</li>
+              <li>📊 Mood tracking with history</li>
+              <li>🎤 Voice input &amp; text-to-speech</li>
+              <li>🌐 10 languages with full UI translation</li>
+              <li>🌸 Gender-aware cursor bloom effects</li>
+              <li>📱 Fully mobile responsive</li>
+              <li>🔒 Secure local authentication</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="about-footer-note">
+          <p>Made with 💜 for every person who needs a moment of calm.</p>
+          <p class="about-footer-sub">SerenityBot · Open source · Private by design · Built with care</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ════ SETTINGS VIEW ════ -->
+    <section class="view" id="view-settings">
+      <div class="view-header">
+        <h2>⚙️ Settings</h2>
+        <p>Customise your SerenityBot experience.</p>
+      </div>
+      <div class="info-page settings-page">
+
+        <!-- Cursor effects -->
+        <div class="settings-section">
+          <h3 class="settings-section-title">🌸 Cursor Effects</h3>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <span class="settings-row-label">Bloom on cursor move</span>
+              <span class="settings-row-desc">Show flowers, stars or other animations as you move your cursor</span>
+            </div>
+            <label class="toggle-switch" aria-label="Toggle cursor bloom">
+              <input type="checkbox" id="settingCursorBloom" checked />
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <span class="settings-row-label">Bloom on click / tap</span>
+              <span class="settings-row-desc">Burst of animations when you click or tap anywhere</span>
+            </div>
+            <label class="toggle-switch" aria-label="Toggle click bloom">
+              <input type="checkbox" id="settingClickBloom" checked />
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Appearance -->
+        <div class="settings-section">
+          <h3 class="settings-section-title">🎨 Appearance</h3>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <span class="settings-row-label">Background particles</span>
+              <span class="settings-row-desc">Floating shapes in the background</span>
+            </div>
+            <label class="toggle-switch" aria-label="Toggle background particles">
+              <input type="checkbox" id="settingParticles" checked />
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <span class="settings-row-label">Reduced motion</span>
+              <span class="settings-row-desc">Minimise all animations for comfort</span>
+            </div>
+            <label class="toggle-switch" aria-label="Toggle reduced motion">
+              <input type="checkbox" id="settingReducedMotion" />
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Voice -->
+        <div class="settings-section">
+          <h3 class="settings-section-title">🎤 Voice</h3>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <span class="settings-row-label">Auto-speak bot replies</span>
+              <span class="settings-row-desc">Read bot responses aloud automatically after voice input</span>
+            </div>
+            <label class="toggle-switch" aria-label="Toggle auto-speak">
+              <input type="checkbox" id="settingAutoSpeak" />
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Profile -->
+        <div class="settings-section">
+          <h3 class="settings-section-title">👤 Your Profile</h3>
+          <div class="settings-profile-card" id="settingsProfileCard">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Data -->
+        <div class="settings-section">
+          <h3 class="settings-section-title">🗄️ Your Data</h3>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <span class="settings-row-label">Clear chat history</span>
+              <span class="settings-row-desc">Remove all saved conversation messages</span>
+            </div>
+            <button class="settings-danger-btn" id="settingClearChat">Clear Chat</button>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <span class="settings-row-label">Clear mood log</span>
+              <span class="settings-row-desc">Remove all mood entries</span>
+            </div>
+            <button class="settings-danger-btn" id="settingClearMood">Clear Mood</button>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-row-info">
+              <span class="settings-row-label">Delete my account</span>
+              <span class="settings-row-desc">Remove your account and all stored data permanently</span>
+            </div>
+            <button class="settings-danger-btn danger-red" id="settingDeleteAccount">Delete Account</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Mobile bottom navigation ── -->
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+    <button class="mobile-nav-btn active" data-view="chat">
+      <span class="mobile-nav-icon">💬</span>
+      <span class="mobile-nav-label" data-i18n="chat">Chat</span>
+    </button>
+    <button class="mobile-nav-btn" data-view="breathing">
+      <span class="mobile-nav-icon">🌬️</span>
+      <span class="mobile-nav-label" data-i18n="breathing">Breathing</span>
+    </button>
+    <button class="mobile-nav-btn" data-view="affirmations">
+      <span class="mobile-nav-icon">✨</span>
+      <span class="mobile-nav-label" data-i18n="affirmations">Affirm</span>
+    </button>
+    <button class="mobile-nav-btn" data-view="mood">
+      <span class="mobile-nav-icon">📊</span>
+      <span class="mobile-nav-label" data-i18n="moodLog">Mood</span>
+    </button>
+    <button class="mobile-nav-btn" data-view="settings">
+      <span class="mobile-nav-icon">⚙️</span>
+      <span class="mobile-nav-label">More</span>
+    </button>
+  </nav>
+
+</div><!-- /.app-wrapper -->
+
+<script src="js/i18n.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/chatbot.js"></script>
+<script src="js/breathing.js"></script>
+<script src="js/affirmations.js"></script>
+<script src="js/mood.js"></script>
+<script src="js/voice.js"></script>
+<script src="js/cursor.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
